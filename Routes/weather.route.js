@@ -1,14 +1,18 @@
 
+
 const {Router}=require("express")
 const weatherRouter=Router()
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
+
 const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': 'd1c8f36415msh2e7a1b6caefa3ddp167082jsn33c71d3d8bd8',
-		'X-RapidAPI-Host': 'weatherbit-v1-mashape.p.rapidapi.com'
-	}
+  method: 'GET',
+  headers: {
+    'X-RapidAPI-Key': 'd1c8f36415msh2e7a1b6caefa3ddp167082jsn33c71d3d8bd8',
+    'X-RapidAPI-Host': 'visual-crossing-weather.p.rapidapi.com'
+  }
 };
+
 const {authenticator}=require("../middlewares/authenticator.middleware")
 const {searchmodel}=require("../models/searches.model")
 // const {Usermodel}=require("../models/user.model")
@@ -32,19 +36,23 @@ await query.save()
  const all = await redis.get(prefferedcity)
 console.log(all);
 if(!all){
-    let res=await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid={"36aaac34bd73b6f6dd672d2e660b094c"}`)
-    
-        
-        await redis.set(prefferedcity, JSON.stringify(res));
+    const url = `https://visual-crossing-weather.p.rapidapi.com/forecast?aggregateHours=24&location=${prefferedcity}&contentType=json&unitGroup=us&shortColumnNames=0`;
 
-    console.log(res)
+   let value=  await fetch(url, options)
+   let data=await value.json()
+//    let data1=await data.json()
+// console.log(value)
+
+        await redis.set(prefferedcity, JSON.stringify(data));
+
+    console.log(data)
     
-    return res.json({message:"request successfull",weather:res})
+    return res.json({message:"request successfull",weather:data})
 }
 else{
     const all = await redis.get(prefferedcity)
 console.log("redis work in this case")
-    return res.json({message:"request successfull",weather:all})
+    return res.json({message:"request successfull",weather:JSON.parse(all)})
 
 }
 
