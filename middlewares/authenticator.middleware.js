@@ -3,7 +3,7 @@ const Redis = require("ioredis")
 const redis=new Redis()
 async function authenticator(req,res,next){
 let accesstoken=req.cookies.accesstoken
-
+console.log(accesstoken)
 
 let all=await redis.lrange("blacklistedtoken",0,-1)
 // console.log(all)
