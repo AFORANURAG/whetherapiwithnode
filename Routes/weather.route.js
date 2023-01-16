@@ -20,7 +20,7 @@ const {searchmodel}=require("../models/searches.model")
 // const jwt=require("jsonwebtoken")
 const Redis = require("ioredis")
 const redis=new Redis()
-weatherRouter.get("/",authenticator,(req,res)=>{
+weatherRouter.get("/",(req,res)=>{
    res.send({"message":"hello from wather endpoint"})
 })
 // so we basically put city in frontend and then it converts city to latitude and logitude 
