@@ -1,0 +1,3 @@
+## if that city weather is already in redis then we dont need to call the api again 
+// it speeds up the thing
+// i am gonna use an object for caching in redis
